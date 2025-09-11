@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Гадание От МАРИНЫ VIP ЛЮКС</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-text-size-adjust: 100%;
+            -moz-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #8a2be2, #4b0082);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            color: #fff;
+            text-align: center;
+            transition: background 1.5s ease;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        body.halloween-theme {
+            background: linear-gradient(135deg, #1a1a1a, #000000);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 10;
+        }
+        
+        h1 {
+            margin-bottom: 12px;
+            font-size: clamp(18px, 5vw, 22px);
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            margin-bottom: 20px;
+            color: #e6e6fa;
+            font-size: clamp(12px, 3vw, 14px);
+            line-height: 1.4;
+        }
+        
+        .process-container {
+            width: 100%;
+            min-height: 220px;
+            margin: 15px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .progress-wrapper {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #8a2be2;
+            transition: opacity 0.5s ease;
+        }
+        
+        .progress-bar {
+            width: 0%;
+            height: 20px;
+            background: linear-gradient(90deg, #9370DB, #8A2BE2, #4B0082);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.7);
+        }
+        
+        .progress-text {
+            margin-top: 10px;
+            font-size: clamp(14px, 3.5vw, 16px);
+            color: #ffd700;
+        }
+        
+        .crystal-ball-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 15px 0;
+        }
+        
+        .crystal-ball {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle at 35% 35%, rgba(173, 216, 230, 0.9), rgba(135, 206, 250, 0.7), rgba(70, 130, 180, 0.6));
+            border-radius: 50%;
+            box-shadow: 
+                0 0 30px rgba(135, 206, 250, 0.8),
+                inset 0 0 20px rgba(255, 255, 255, 0.3);
+            animation: glow 2s infinite alternate;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .crystal-stand {
+            width: 60px;
+            height: 20px;
+            background: linear-gradient(135deg, #d4af37, #ffd700, #d4af37);
+            border-radius: 8px 8px 4px 4px;
+            margin-top: -5px;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .crystal-stand::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 8px;
+            background: linear-gradient(135deg, #ffd700, #d4af37);
+            border-radius: 4px 4px 0 0;
+        }
+        
+        .final-image {
+            max-width: 95%;
+            max-height: 200px;
+            object-fit: contain;
+            border-radius: 8px;
+            display: none;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .final-image.active {
+            display: block;
+        }
+        
+        .start-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            color: #4b0082;
+            padding: 14px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: clamp(14px, 4vw, 16px);
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+            margin: 10px 0;
+            touch-action: manipulation;
+        }
+        
+        .start-button:active {
+            transform: scale(0.95);
+        }
+        
+        .start-button.disabled {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        .curse-button {
+            display: none;
+            background: linear-gradient(135deg, #ff0000, #8b0000);
+            color: #ffffff;
+            padding: 14px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: clamp(12px, 3.5vw, 14px);
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(139, 0, 0, 0.5);
+            transition: all 0.3s ease;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+            margin: 10px 0;
+            text-align: center;
+            animation: pulse-red 2s infinite;
+            touch-action: manipulation;
+        }
+        
+        .status {
+            margin-top: 15px;
+            font-size: clamp(12px, 3vw, 14px);
+            color: #ffd700;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .curse-message {
+            display: none;
+            background: #8b0000;
+            color: #ff4500;
+            padding: 12px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: bold;
+            font-size: clamp(16px, 4vw, 18px);
+            text-shadow: 0 0 5px #000;
+            border: 2px solid #ff4500;
+            box-shadow: 0 0 15px #ff0000;
+            animation: pulse 2s infinite;
+        }
+        
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Хэллоуинские элементы */
+        .halloween-element {
+            position: absolute;
+            font-size: 24px;
+            z-index: 5;
+            pointer-events: none;
+            display: none;
+        }
+        
+        body.halloween-theme .halloween-element {
+            display: block;
+        }
+        
+        /* Анимации */
+        @keyframes glow {
+            0% { 
+                box-shadow: 
+                    0 0 20px rgba(135, 206, 250, 0.6),
+                    inset 0 0 15px rgba(255, 255, 255, 0.2);
+            }
+            100% { 
+                box-shadow: 
+                    0 0 40px rgba(135, 206, 250, 0.9),
+                    inset 0 0 25px rgba(255, 255, 255, 0.4);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        @keyframes pulse-red {
+            0%, 100% { transform: scale(1); box-shadow: 0 4px 12px rgba(139, 0, 0, 0.5); }
+            50% { transform: scale(1.05); box-shadow: 0 6px 16px rgba(255, 0, 0, 0.7); }
+        }
+        
+        .pumpkin1 {
+            top: 8%; left: 5%; animation: float 6s infinite ease-in-out;
+        }
+        .pumpkin2 {
+            top: 12%; right: 7%; animation: float 7s infinite ease-in-out;
+        }
+        .bat1 {
+            top: 20%; left: 8%; animation: float 5s infinite ease-in-out;
+        }
+        .bat2 {
+            top: 30%; right: 12%; animation: float 8s infinite ease-in-out;
+        }
+        
+        /* Медиа-запросы для разных устройств */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+            
+            .crystal-ball {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .crystal-stand {
+                width: 50px;
+                height: 15px;
+            }
+            
+            .start-button, .curse-button {
+                padding: 12px 25px;
+            }
+        }
+        
+        @media (max-width: 320px) {
+            .container {
+                padding: 12px;
+            }
+            
+            .crystal-ball {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .progress-wrapper {
+                padding: 10px;
+            }
+        }
+        
+        /* Предотвращение масштабирования на iOS */
+        @supports (-webkit-touch-callout: none) {
+            body {
+                min-height: -webkit-fill-available;
+            }
+            
+            .container {
+                max-height: 90vh;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+        
+        /* Фикс для Safari */
+        _::-webkit-full-page-media, _:future, :root .safari-only {
+            min-height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Хэллоуинские элементы -->
+    <div class="halloween-element pumpkin1">🎃</div>
+    <div class="halloween-element pumpkin2">🎃</div>
+    <div class="halloween-element bat1">🦇</div>
+    <div class="halloween-element bat2">🦇</div>
+
+    <div class="container">
+        <h1>ГАДАНИЕ ОТ МАРИНЫ VIP ЛЮКС</h1>
+        <p class="subtitle">Раскройте тайны будущего с помощью мистического гадания</p>
+        
+        <div class="process-container">
+            <div class="progress-wrapper" id="progressWrapper">
+                <div class="progress-bar" id="progressBar"></div>
+                <div class="progress-text" id="progressText">Готово к гаданию...</div>
+            </div>
+            
+            <div class="crystal-ball-container">
+                <div class="crystal-ball" id="crystalBall"></div>
+                <div class="crystal-stand"></div>
+            </div>
+            
+            <img src="https://i.postimg.cc/vTQ7VRg5/E73-C99-C8-6097-4-A79-B06-E-BBC57-C1-AB82-F.jpg" class="final-image" id="finalImage" alt="Финальная картина" loading="lazy">
+        </div>
+        
+        <div class="buttons-container">
+            <div class="curse-message" id="curseMessage">
+                ВЫ ПРОКЛЯТЫ!
+            </div>
+            
+            <button class="start-button" id="startButton" type="button">НАЧАТЬ ГАДАНИЕ</button>
+            <a href="https://t.me/mihi_inclino_te" class="curse-button" id="curseButton" rel="noopener noreferrer">НЕ В КОЕМ СЛУЧАЕ НЕ ПЕРЕХОДИ СЮДА</a>
+        </div>
+        
+        <p class="status" id="statusText">Нажмите "Начать гадание" для начала ритуала</p>
+    </div>
+
+    <script>
+        const startButton = document.getElementById('startButton');
+        const curseButton = document.getElementById('curseButton');
+        const statusText = document.getElementById('statusText');
+        const curseMessage = document.getElementById('curseMessage');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const progressWrapper = document.getElementById('progressWrapper');
+        const crystalBall = document.getElementById('crystalBall');
+        const finalImage = document.getElementById('finalImage');
+        const body = document.body;
+        
+        let isRunning = false;
+        let progress = 0;
+        const totalProgress = 100;
+        
+        // Предзагрузка изображения
+        function preloadImage() {
+            const img = new Image();
+            img.src = finalImage.src;
+        }
+        
+        // Инициализация
+        function init() {
+            preloadImage();
+            
+            // Добавляем обработчики для всех типов устройств
+            startButton.addEventListener('click', startFortune);
+            startButton.addEventListener('touchstart', handleTouchStart, {passive: true});
+            
+            // Предотвращение долгого нажатия на iOS
+            document.addEventListener('touchstart', function() {}, {passive: true});
+        }
+        
+        function handleTouchStart(e) {
+            e.preventDefault();
+            startFortune();
+        }
+        
+        function startFortune() {
+            if (isRunning) return;
+            
+            isRunning = true;
+            startButton.classList.add('disabled');
+            statusText.textContent = "Идет процесс гадания...";
+            curseMessage.style.display = 'none';
+            progress = 0;
+            progressBar.style.width = '0%';
+            
+            // Показываем окантовку шкалы
+            progressWrapper.style.opacity = '1';
+            progressWrapper.style.display = 'block';
+            
+            // Запускаем процесс заполнения шкалы
+            const progressInterval = setInterval(() => {
+                progress += 2;
+                progressBar.style.width = progress + '%';
+                progressText.textContent = "Процесс гадания: " + progress + "%";
+                
+                // Меняем цвет кристального шара в процессе
+                if (progress < 33) {
+                    crystalBall.style.background = "radial-gradient(circle at 35% 35%, rgba(173, 216, 230, 0.9), rgba(135, 206, 250, 0.7), rgba(70, 130, 180, 0.6))";
+                } else if (progress < 66) {
+                    crystalBall.style.background = "radial-gradient(circle at 35% 35%, rgba(135, 206, 250, 0.8), rgba(70, 130, 180, 0.7), rgba(0, 0, 139, 0.6))";
+                } else {
+                    crystalBall.style.background = "radial-gradient(circle at 35% 35%, rgba(70, 130, 180, 0.8), rgba(0, 0, 139, 0.7), rgba(75, 0, 130, 0.6))";
+                }
+                
+                if (progress >= totalProgress) {
+                    clearInterval(progressInterval);
+                    finishFortune();
+                }
+            }, 100);
+        }
+        
+        function finishFortune() {
+            // Включаем хэллоуинскую тему
+            body.classList.add('halloween-theme');
+            
+            // Показываем финальное изображение
+            finalImage.classList.add('active');
+            document.querySelector('.crystal-ball-container').style.display = 'none';
+            
+            // Прячем шкалу прогресса с анимацией
+            progressWrapper.style.opacity = '0';
+            setTimeout(() => {
+                progressWrapper.style.display = 'none';
+            }, 500);
+            
+            // Показываем сообщение о проклятии
+            curseMessage.style.display = 'block';
+            
+            // Показываем кнопку проклятия вместо стартовой
+            startButton.style.display = 'none';
+            curseButton.style.display = 'inline-block';
+            
+            // Обновляем текст статуса
+            statusText.textContent = "Гадание завершено!";
+            progressText.textContent = "Процесс завершен на 100%";
+            
+            isRunning = false;
+            
+            // Вибрация на поддерживающих устройствах
+            if ('vibrate' in navigator) {
+                navigator.vibrate([200, 100, 200]);
+            }
+        }
+        
+        // Запуск инициализации после загрузки
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>
