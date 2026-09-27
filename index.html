@@ -17,7 +17,7 @@
     z-index: 0;
   }
 
-  /* Воронка — как раньше, без scale-анимации */
+  /* Воронка */
   #swirl {
     position: fixed; left: 50%; top: 50%;
     width: 200vmax; height: 200vmax;
@@ -54,7 +54,7 @@
   }
   #center-glow.active { opacity: 1; }
 
-  /* ===== ТЕКСТЫ ===== */
+  /* Тексты */
   #top-text {
     position: fixed;
     left: 50%; top: 12%;
@@ -175,25 +175,25 @@ const STAGES = [
   "https://i.postimg.cc/hv8zjWvd/pumpkin-4.png",
   "https://i.postimg.cc/yxhgd4x9/pumpkin-5.png"
 ];
+
 const LS_KEY   = "pumpkin_stage_v1";
-const USED_KEY = "pumpkin_used_v1";
+const USED_KEY = "pumpkin_used_v2";        // ← новая версия! старые "v1" не считаются
 const HOLD_TIME = 2500;
 const MAX_STAGE = STAGES.length - 1;
 
-/* ===== Флаг «пробудил на этом устройстве» ===== */
 const isUsed   = () => localStorage.getItem(USED_KEY) === "1";
 const markUsed = () => localStorage.setItem(USED_KEY, "1");
 
 let currentStage = 0;
 let holding = false, holdStart = 0, holdRaf = null;
 
-const swirlEl    = document.getElementById("swirl");
-const swirlSvg   = document.getElementById("swirl-svg");
-const glowEl     = document.getElementById("center-glow");
-const pumpkinEl  = document.getElementById("pumpkin");
-const sliceEl    = document.getElementById("slice");
-const stageEl    = document.getElementById("stage");
-const topTextEl  = document.getElementById("top-text");
+const swirlEl      = document.getElementById("swirl");
+const swirlSvg     = document.getElementById("swirl-svg");
+const glowEl       = document.getElementById("center-glow");
+const pumpkinEl    = document.getElementById("pumpkin");
+const sliceEl      = document.getElementById("slice");
+const stageEl      = document.getElementById("stage");
+const topTextEl    = document.getElementById("top-text");
 const bottomTextEl = document.getElementById("bottom-text");
 
 /* ========== СПИРАЛЬ-ЛЕДЕНЕЦ ========== */
@@ -269,13 +269,9 @@ function updateTexts() {
   }
 }
 
-/* ===== Постоянные состояния после пробуждения =====
-   - Если пробуждено (used = 1): воронка висит всегда на фоне
-   - На финале: ещё быстрее + тыква трясётся
-   ============================================ */
+/* ===== Постоянные эффекты после пробуждения ===== */
 function updateAmbientState() {
   if (!isUsed()) {
-    // ещё не пробудил на этом устройстве — воронки нет
     swirlEl.classList.remove("active");
     glowEl.classList.remove("active");
     glowEl.style.opacity = "";
@@ -289,12 +285,10 @@ function updateAmbientState() {
   glowEl.classList.add("active");
 
   if (currentStage >= MAX_STAGE) {
-    // Финал — максимальная скорость + тряска
     swirlSvg.style.animationDuration = "1.1s";
     glowEl.style.opacity = "0.9";
     pumpkinEl.classList.add("shake");
   } else {
-    // Пробуждено, но не финал — воронка есть, но спокойная
     swirlSvg.style.animationDuration = "10s";
     glowEl.style.opacity = "0.55";
     pumpkinEl.classList.remove("shake");
@@ -340,7 +334,7 @@ function startHold(e) {
   holding = true;
   holdStart = performance.now();
 
-  // Воронка появляется целиком (как раньше)
+  // Воронка появляется целиком
   swirlEl.classList.add("active");
   glowEl.classList.add("active");
 
@@ -351,11 +345,10 @@ function animateHold() {
   if (!holding) return;
   const t = Math.min((performance.now() - holdStart) / HOLD_TIME, 1);
 
-  // Ускорение вращения при удержании (10s -> 0.6s)
+  // Ускорение вращения (10s -> 0.6s)
   const dur = 10 - t * 9.4;
   swirlSvg.style.animationDuration = dur.toFixed(2) + "s";
 
-  // Пульсация тыквы
   pumpkinEl.style.transform = `scale(${1 + t * 0.15})`;
   glowEl.style.opacity = (0.4 + t * 0.6).toFixed(2);
 
@@ -367,12 +360,9 @@ function endHold() {
   if (!holding) return;
   holding = false;
   cancelAnimationFrame(holdRaf);
-
-  // Убираем пульсацию тыквы
   pumpkinEl.style.transform = "";
 
-  // ⚠️ Воронку НЕ гасим, если устройство уже пробуждено.
-  // Она остаётся навсегда.
+  // Если пробуждено — воронка остаётся. Если нет — гаснет.
   updateAmbientState();
 }
 
@@ -383,7 +373,6 @@ function finishHold() {
   const next = Math.min(currentStage + 1, MAX_STAGE);
   if (next === currentStage) { endHold(); return; }
 
-  // Помечаем, что это устройство пробудило
   markUsed();
 
   sliceEl.classList.remove("fly");
@@ -403,6 +392,40 @@ window.addEventListener("pointerup", endHold);
 window.addEventListener("pointercancel", endHold);
 window.addEventListener("pointerleave", endHold);
 stageEl.addEventListener("contextmenu", e => e.preventDefault());
+
+/* ========== СЕКРЕТНАЯ КНОПКА СБРОСА ==========
+   Быстро тапни 5 раз по верхнему левому углу экрана (100×100 px)
+   ============================================= */
+let tapCount = 0, tapTimer = null;
+document.addEventListener("click", (e) => {
+  if (e.clientX > 100 || e.clientY > 100) return;
+  tapCount++;
+  clearTimeout(tapTimer);
+  tapTimer = setTimeout(() => { tapCount = 0; }, 1200);
+
+  if (tapCount >= 5) {
+    tapCount = 0;
+    if (confirm("Сбросить прогресс тыквы?\n(локально и в облаке)")) {
+      // 1. Чистим localStorage
+      localStorage.removeItem("pumpkin_used_v1");
+      localStorage.removeItem("pumpkin_used_v2");
+      localStorage.removeItem("pumpkin_stage_v1");
+      // 2. Чистим Firebase
+      Promise.all([
+        fetch(SYNC_URL + "/stage.json", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: "0"
+        }),
+        fetch(SYNC_URL + "/awakenings.json", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: "0"
+        }).catch(() => {})  // если поля нет — не страшно
+      ]).finally(() => location.reload());
+    }
+  }
+});
 
 /* ========== Старт ========== */
 loadStage();
